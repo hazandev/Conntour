@@ -1,0 +1,42 @@
+// === Colors ===
+$primary-color: rgb(74, 74, 233);
+$text-color: #333;
+$background-color: #fff;
+$light-gray: #f4f4f4;
+
+// === Typography ===
+$font-family-base: 'Inter', sans-serif;
+
+// Font sizes (mobile-first)
+$font-size-base: 1rem; // 16px
+$font-size-h1: 2rem;
+$font-size-h2: 1.75rem;
+$font-size-h3: 1.5rem;
+
+// === Spacing ===
+// Spacing units (mobile-first)
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem;  // 8px
+$spacing-md: 1rem;    // 16px
+$spacing-lg: 1.5rem;  // 24px
+$spacing-xl: 2.5rem;  // 40px
+
+// === Layout ===
+$container-padding-mobile: $spacing-md;
+$container-padding-tablet: $spacing-lg;
+
+$container-max-width-tablet: 720px;
+$container-max-width-desktop: 960px;
+$container-max-width-large-desktop: 1140px;
+$container-max-width-xl-desktop: 1320px; // New max width
+
+// === Space Theme ===
+$space-dark: #0b0f18;
+$space-purple: #23114b;
+$space-blue: #0d1630;
+$space-accent: #00f2ff; // Bright cyan
+$text-light: #e0e0e0;
+$text-muted: #a0a0a0;
+
+$header-height: 80px;
+$footer-height: 70px;

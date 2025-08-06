@@ -1,0 +1,30 @@
+// Import global helpers first
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100VW;
+  max-width: 100vw;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+// This is the primary container that will be used by Header, Main, and Footer
+.container {
+  @include container;
+}
+
+.section {
+  padding: $spacing-lg 0;
+
+  @include respond-to(tablet) {
+    padding: $spacing-sm 0;
+  }
+}

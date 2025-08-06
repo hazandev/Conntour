@@ -1,0 +1,94 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.galleryContainer {
+  width: 100%;
+  min-height: 100vh;
+}
+
+// Controls section for results count and sorting
+.galleryControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  margin: 0 auto;
+  max-width: 90%;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-md;
+  }
+}
+
+.galleryWrapper,
+.gallery-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(to bottom, #0b0c10, #1f2833);
+    min-height: 100vh;
+  
+    .error,
+    .no-results {
+      color: #ffffffcc;
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-top: 4rem;
+      text-align: center;
+    }
+  
+    .react-window__outer {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+  
+    .react-window__inner {
+      display: grid;
+      gap: 1rem;
+    }
+  
+    // גלריית התמונות עצמה
+    .image-card {
+      background-color: #121212;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #2c2c2c;
+  
+      &:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+      }
+  
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #2c2c2c;
+      }
+  
+      .info {
+        padding: 0.8rem 1rem;
+        color: #ffffffcc;
+  
+        h3 {
+          font-size: 1.1rem;
+          margin: 0;
+          font-weight: 600;
+        }
+  
+        p {
+          font-size: 0.9rem;
+          margin: 0.5rem 0 0;
+          color: #aaa;
+        }
+      }
+    }
+  }
+  

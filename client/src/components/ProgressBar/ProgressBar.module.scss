@@ -1,0 +1,83 @@
+@use '../../styles/variables' as *;
+
+.progressContainer {
+  position: relative;
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.small {
+  height: 4px;
+  min-width: 60px;
+}
+
+.medium {
+  height: 6px;
+  min-width: 80px;
+}
+
+.large {
+  height: 8px;
+  min-width: 120px;
+}
+
+.progressBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: inherit;
+}
+
+.progressBar {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  transition: all 0.3s ease;
+  background: linear-gradient(90deg, var(--progress-start), var(--progress-end));
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 2s infinite;
+    border-radius: inherit;
+  }
+}
+
+.high {
+  --progress-start: #10b981;
+  --progress-end: #34d399;
+}
+
+.medium {
+  --progress-start: #f59e0b;
+  --progress-end: #fbbf24;
+}
+
+.low {
+  --progress-start: #ef4444;
+  --progress-end: #f87171;
+}
+
+.very-low {
+  --progress-start: #6b7280;
+  --progress-end: #9ca3af;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -1,0 +1,54 @@
+// Import global helpers first
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.footer {
+  background-color: $space-dark;
+  border-top: 1px solid rgba($text-muted, 0.1);
+  padding: $spacing-lg 0;
+  color: $text-muted;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 20px $spacing-lg;     
+  border-top: 1px solid #656ef1;
+  display: flex;
+  // The direct child is now the container from Layout
+  & > div {
+    @include center-flex;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+    gap: $spacing-md;
+  }
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 $spacing-lg;
+  }
+}
+
+.copy {
+  text-align: center;
+  flex-grow: 1;
+
+  @include respond-to(tablet) {
+    text-align: left;
+    flex-grow: 0;
+  }
+}
+
+.footerLinks {
+  @include center-flex;
+  gap: $spacing-md;
+
+  a {
+    color: $text-muted;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $space-accent;
+    }
+  }
+}

@@ -1,0 +1,64 @@
+.sortContainer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.resultsCount {
+  font-size: 1.2rem;
+  color: #66b9df;
+  font-weight: 600;
+}
+
+.sortLabel {
+  font-size: 0.9rem;
+  padding-inline-end: 1rem;
+  color: #a0a0a0;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.sortSelect {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #1a1a2e;
+  border: 1px solid #4a4a5a;
+  border-radius: 4px;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:focus {
+    outline: none;
+    border-color: #6c63ff;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.25);
+  }
+
+  option {
+    background-color: #1a1a2e;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #4a4a5a;
+    cursor: pointer;
+  }
+}
+
+.selectWrapper::after {
+  content: '▼';
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

@@ -1,0 +1,22 @@
+.resultsCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(108, 99, 255, 0.2));
+  border-radius: 8px;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  box-shadow: 0 0 15px rgba(108, 99, 255, 0.2);
+  color: #fff;
+
+  .number {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #6c63ff;
+    text-shadow: 0 0 10px #6c63ff;
+  }
+
+  .text {
+    font-size: 0.9rem;
+  }
+}

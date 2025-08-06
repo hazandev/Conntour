@@ -1,0 +1,139 @@
+// Import global helpers first
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.header {
+  height: $header-height;
+  background: linear-gradient(180deg, rgba(11, 15, 24, 0.9) 0%, rgba(13, 22, 48, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba($space-accent, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.navContainer {
+  @include center-flex;
+  @include container; // This ensures responsiveness
+  
+  & {
+    justify-content: space-between;
+    height: 100%;
+  }
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  z-index: 10;
+
+  span {
+    font-size: 1.2rem;
+    margin-left: $spacing-xs;
+  }
+}
+
+// Mobile navigation toggle (hamburger)
+.mobileNavToggle {
+  display: none;
+}
+
+.hamburger {
+  display: block;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  width: 28px;
+  height: 22px;
+
+  span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #fff;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+    &:nth-child(1) { top: 0px; }
+    &:nth-child(2) { top: 9px; }
+    &:nth-child(3) { top: 18px; }
+  }
+
+  @include respond-to(tablet) {
+    display: none;
+  }
+}
+
+.navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba($space-dark, 0.95);
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-xl;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.75rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    &:hover { color: $space-accent; }
+  }
+
+  @include respond-to(tablet) {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    height: auto;
+    width: auto;
+    background: none;
+    backdrop-filter: none;
+    gap: $spacing-lg;
+    a {
+      font-size: $font-size-base;
+      color: $text-light;
+      position: relative;
+      padding: $spacing-sm 0;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $space-accent;
+        transition: width 0.3s ease;
+      }
+      &:hover {
+        color: #fff;
+        &::after { width: 100%; }
+      }
+    }
+  }
+}
+
+.mobileNavToggle:checked ~ .navLinks {
+  transform: translateX(0);
+}
+.mobileNavToggle:checked ~ .hamburger span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.mobileNavToggle:checked ~ .hamburger span:nth-child(2) { opacity: 0; }
+.mobileNavToggle:checked ~ .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }

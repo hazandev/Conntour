@@ -1,0 +1,92 @@
+// === Imports ===
+// @use rules must be at the top of the file.
+@use 'sass:math';
+@use 'sass:string';
+@use './variables' as *;
+
+// === CSS Reset ===
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// === Starfield Background Animation ===
+@function multiple-box-shadow($n) {
+  $value: '#{math.random(2000)}px #{math.random(2000)}px #FFF';
+  @for $i from 2 through $n {
+    $value: '#{$value} , #{math.random(2000)}px #{math.random(2000)}px #FFF';
+  }
+  @return string.unquote($value);
+}
+
+$shadows-small: multiple-box-shadow(700);
+$shadows-medium: multiple-box-shadow(200);
+$shadows-big: multiple-box-shadow(100);
+
+@keyframes anim-star {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-2000px); }
+}
+
+// === Global Styles ===
+html {
+  font-size: 100%;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  font-family: $font-family-base;
+  background-color: $space-dark;
+  color: $text-light;
+  background-image:
+    radial-gradient(ellipse at bottom, $space-purple 0%, transparent 60%),
+    radial-gradient(ellipse at top, $space-blue 0%, transparent 50%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+// The body itself has the main background, and we add stars via pseudo-elements
+// to allow them to animate independently without affecting layout.
+body::before, body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; // Place stars behind content
+}
+
+// Smaller, faster-moving stars
+body::before {
+  width: 1px;
+  height: 1px;
+  box-shadow: $shadows-small;
+  animation: anim-star 50s linear infinite;
+}
+
+// Larger, slower-moving stars
+body::after {
+  width: 2px;
+  height: 2px;
+  box-shadow: $shadows-medium;
+  animation: anim-star 100s linear infinite;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff; // Brighter white for headers
+}
+
+h1 { font-size: $font-size-h1; }
+h2 { font-size: $font-size-h2; }
+h3 { font-size: $font-size-h3; }

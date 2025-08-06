@@ -1,0 +1,54 @@
+@use '../../styles/variables' as *;
+
+.confidenceIndicator {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  width: 100%;
+}
+
+.small {
+  .scoreText {
+    font-size: 0.75rem;
+  }
+}
+
+.medium {
+  .scoreText {
+    font-size: 0.85rem;
+  }
+}
+
+.large {
+  .scoreText {
+    font-size: 1rem;
+  }
+}
+
+.high {
+  color: #10b981;
+}
+
+.medium {
+  color: #f59e0b;
+}
+
+.low {
+  color: #ef4444;
+}
+
+.very-low {
+  color: #6b7280;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 60px;
+}
+
+.scoreText {
+  font-weight: 600;
+  line-height: 1;
+}

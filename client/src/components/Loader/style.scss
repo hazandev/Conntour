@@ -1,0 +1,139 @@
+@import '../../styles/_variables.scss';
+
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinnerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sun {
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px #FFD700,
+    0 0 40px #FFD700,
+    0 0 60px #FFD700;
+  animation: pulse 2s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+.orbit {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: rotate linear infinite;
+}
+
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, currentColor 0%, color-mix(in srgb, currentColor 50%, #000) 100%);
+  box-shadow: 0 0 10px currentColor;
+  top: -2px;
+  left: -2px;
+  transform-origin: center;
+}
+
+/* Size variants */
+.spinner--small {
+  .sun {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .planet {
+    width: 3px;
+    height: 3px;
+  }
+}
+
+.spinner--medium {
+  .sun {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .planet {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+.spinner--large {
+  .sun {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .planet {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+.message {
+  color: var(--text-light, #e0e6ed);
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 
+      0 0 20px #FFD700,
+      0 0 40px #FFD700,
+      0 0 60px #FFD700;
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 
+      0 0 30px #FFD700,
+      0 0 60px #FFD700,
+      0 0 90px #FFD700;
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .sun,
+  .message {
+    animation: none;
+  }
+  
+  .sun {
+    box-shadow: 0 0 20px #FFD700;
+  }
+}
