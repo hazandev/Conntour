@@ -1,0 +1,247 @@
+/* General dropdown container */
+.historyDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  border-radius: 12px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  max-height: 450px;
+  
+  /* Space theme styling */
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgb(26, 38, 64) 0%, rgb(11, 15, 24) 100%);
+  border: 1px solid #37338197;
+  box-shadow: 0 0 25px rgba(79, 70, 229, 0.4), 0 4px 15px rgba(0,0,0,0.4);
+  backdrop-filter: none; /* Removed blur for solid background */
+  
+  /* Smooth transition for appearance */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: hidden; /* Hide main container scroll, list will scroll */
+}
+
+/* Header section */
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: rgba(11, 15, 24, 0.5); /* Semi-transparent dark bg */
+  border-bottom: 1px solid rgba(129, 140, 248, 0.3); /* Subtle accent border */
+}
+
+.historyTitle {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px rgba(129, 140, 248, 0.5);
+}
+
+.historyCount {
+  margin-left: 8px;
+  color: #a0a0a0;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.clearAllButton {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #c7d2fe;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(129, 140, 248, 0.1);
+    border-color: rgba(129, 140, 248, 0.3);
+    color: white;
+    box-shadow: 0 0 8px rgba(129, 140, 248, 0.3);
+  }
+}
+
+/* Empty state message */
+.emptyHistory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.emptyHistory:hover .emptyIcon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.emptyHistory p {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.emptyHistory small {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+}
+
+/* List of history items */
+.historyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+  transition: all 0.2s ease-out;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:hover {
+    background: linear-gradient(90deg, rgba(79, 70, 229, 0.15) 0%, rgba(79, 70, 229, 0) 100%);
+  }
+}
+
+.historyItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: calc(100% - 30px);
+  overflow: hidden;
+}
+
+.historyQueryLine,
+.historyMetaLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.historyQuery {
+  font-weight: 500;
+  color: #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyResultsCount {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  background-color: rgba(55, 65, 81, 0.5);
+  padding: 2px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.historyTime {
+  font-size: 0.8rem;
+  color: #8b949e;
+}
+
+.historyConfidence {
+  font-size: 0.8rem;
+  color: #63b3ed;
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(99, 179, 237, 0.4);
+}
+
+.deleteHistoryButton {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px;
+  margin-left: 30px;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #a68282;
+  }
+}
+
+/* Pagination and Footer */
+.paginationContainer, .historyFooter {
+  padding: 8px 16px;
+  background-color: rgba(11, 15, 24, 0.5);
+  border-top: 1px solid rgba(129, 140, 248, 0.3);
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paginationButton {
+  background: transparent;
+  border: 1px solid #4a5568;
+  color: #e0e0e0;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) {
+    background-color: rgba(129, 140, 248, 0.1);
+    border-color: #818cf8;
+    color: white;
+  }
+  
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.paginationInfo {
+  display: flex;
+  align-items: center;
+}
+
+.pageIndicator {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+}
+
+.historyFooter {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #8b949e;
+}

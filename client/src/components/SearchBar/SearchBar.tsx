@@ -1,7 +1,6 @@
 import React, { type KeyboardEvent, useEffect, useRef } from 'react';
-import { useSearch } from './useSearch';
-import { useSearchHistory } from '../SearchHistory/useSearchHistory';
-import { SearchHistoryDropdown } from '../SearchHistory/SearchHistoryDropdown';
+import { useSearchBar } from './useSearchBar';
+import { SearchHistory } from '../SearchHistory';
 import { Spinner } from '../Loader';
 import styles from './SearchBar.module.scss';
 import { TEXTS } from '../../constants/texts';
@@ -32,36 +31,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     isSearching,
     error,
     clearSearch,
-  } = useSearch(debounceMs);
-
-  const {
-    history,
-    paginatedHistory,
-    addToHistory,
-    removeFromHistory,
-    clearHistory,
-    isHistoryOpen,
-    toggleHistory,
-    closeHistory,
-    currentPage,
-    totalPages,
-    hasNextPage,
-    hasPrevPage,
-    nextPage,
-    prevPage,
-    goToPage,
-  } = useSearchHistory();
+  } = useSearchBar(debounceMs);
 
   const isInitialMount = useRef(true);
+  const historyRef = useRef<{ actions: { toggleHistory: () => void, closeHistory: () => void, addToHistory: (query: string, resultsCount?: number, avgConfidence?: number) => void } }>(null);
 
   useEffect(() => {
     onResults(results);
     if (!isInitialMount.current && searchQuery.trim()) {
-      addToHistory(searchQuery.trim(), results.length, averageConfidence);
+      historyRef.current?.actions.addToHistory(searchQuery.trim(), results.length, averageConfidence);
     } else {
       isInitialMount.current = false;
     }
-  }, [results, averageConfidence]);
+  }, [results, averageConfidence, searchQuery]);
 
   useEffect(() => {
     onSearchQueryChange(searchQuery);
@@ -74,9 +56,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      closeHistory();
+      historyRef.current?.actions.closeHistory();
     } else if (event.key === 'Escape') {
-      closeHistory();
+      historyRef.current?.actions.closeHistory();
     }
   };
 
@@ -90,13 +72,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleClearSearch = () => {
     clearSearch();
-    closeHistory();
+    historyRef.current?.actions.closeHistory();
   };
 
   const containerClasses = [
     styles.searchBarContainer,
     isSearching ? styles.searchingState : '',
-    isHistoryOpen ? styles.historyOpen : '',
     className,
   ].filter(Boolean).join(' ');
 
@@ -127,8 +108,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             ) : (
               <button
                 type="button"
-                onClick={toggleHistory}
-                className={`${styles.historyButton} ${isHistoryOpen ? styles.active : ''}`}
+                onClick={() => historyRef.current?.actions.toggleHistory()}
+                className={`${styles.historyButton}`}
                 aria-label="Search history"
               >
                 🕘
@@ -147,22 +128,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             )}
           </div>
 
-          <SearchHistoryDropdown
-            history={paginatedHistory}
-            totalHistory={history}
-            isOpen={isHistoryOpen}
-            onClose={closeHistory}
-            onSelectQuery={handleHistorySelect}
-            onDeleteQuery={removeFromHistory}
-            onClearAll={clearHistory}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
-            onNextPage={nextPage}
-            onPrevPage={prevPage}
-            onGoToPage={goToPage}
-          />
+          <SearchHistory onSelectQuery={handleHistorySelect} ref={historyRef} />
         </div>
         
         {error && <div className={styles.errorPill}>{error}</div>}

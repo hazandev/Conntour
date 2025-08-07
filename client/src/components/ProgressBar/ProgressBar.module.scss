@@ -64,13 +64,13 @@
 }
 
 .low {
-  --progress-start: #ef4444;
-  --progress-end: #f87171;
+  --progress-start: #6b7280;
+  --progress-end: #9ca3af;
 }
 
 .very-low {
-  --progress-start: #6b7280;
-  --progress-end: #9ca3af;
+  --progress-start: #ef4444;
+  --progress-end: #f87171;
 }
 
 @keyframes shimmer {
