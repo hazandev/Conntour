@@ -1,10 +1,14 @@
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './components/Layout';
-import { Gallery } from './components/Gallery/Gallery';
+import AppRoutes from './routes/AppRoutes';
 
-export const App = () => {
+export const App: React.FC = () => {
     return (
-        <Layout>
-            <Gallery />
-        </Layout>
-    )
-}
+        <Router>
+            <Layout>
+                <AppRoutes />
+            </Layout>
+        </Router>
+    );
+};

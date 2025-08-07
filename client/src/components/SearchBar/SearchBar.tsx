@@ -4,6 +4,7 @@ import { useSearchHistory } from '../SearchHistory/useSearchHistory';
 import { SearchHistoryDropdown } from '../SearchHistory/SearchHistoryDropdown';
 import { Spinner } from '../Loader';
 import styles from './SearchBar.module.scss';
+import { TEXTS } from '../../constants/texts';
 
 interface SearchBarProps {
   onResults: (results: any[]) => void;
@@ -19,7 +20,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onResults,
   onSearchQueryChange,
   onSearching,
-  placeholder = 'Search space images... (e.g.: Mars, Earth day and night, distant galaxies)',
+  placeholder = TEXTS.SEARCH.PLACEHOLDER,
   debounceMs = 500,
   className = '',
   averageConfidence,

@@ -3,6 +3,7 @@ import { get } from '../../utils/fetchClient';
 import type { ImageItem } from '../../types/ImageItem';
 import { toast } from 'react-toastify';
 import { useSortImages } from './useSortImages';
+import { TEXTS, formatText } from '../../constants/texts';
 
 export const useGallery = () => {
     const [initialImages, setInitialImages] = useState<ImageItem[]>([]);
@@ -17,12 +18,18 @@ export const useGallery = () => {
         const fetchInitialImages = async () => {
             try {
                 setIsLoading(true);
+                setError(null);
+                console.log('Fetching initial images...');
                 const fetchedImages = await get<ImageItem[]>('/sources');
+                console.log('Fetched images:', fetchedImages.length);
                 setInitialImages(fetchedImages);
+                // Clear any previous errors when data loads successfully
+                setError(null);
             } catch (err: any) {
-                const errorMessage = err.message || 'Failed to load initial images.';
+                console.error('Error fetching images:', err);
+                const errorMessage = err.message || TEXTS.ERRORS.LOADING_ERROR;
                 setError(errorMessage);
-                toast.error(errorMessage);
+                toast.error(TEXTS.TOAST.ERROR_PREFIX + errorMessage);
             } finally {
                 setIsLoading(false);
             }
@@ -36,6 +43,8 @@ export const useGallery = () => {
 
     const handleResults = (results: ImageItem[]) => {
         setSearchResults(results);
+        // Clear error when search results are received
+        setError(null);
     };
 
     const handleSearchQuery = (query: string) => {
@@ -54,7 +63,8 @@ export const useGallery = () => {
         setSelectedImage(null);
     }
 
-    const hasStateToRender = (isLoading || !!error || !sortedImages.length) && !isSearching;
+    // Only show error state if there's an error AND no images to display
+    const hasStateToRender = (isLoading || (!!error && !sortedImages.length) || (!sortedImages.length && !isSearching));
     const showControls = currentSearchQuery && !hasStateToRender;
 
     return {

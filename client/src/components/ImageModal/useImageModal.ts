@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export const useImageModal = (onClose: () => void) => {
   const [isClosing, setIsClosing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [view, setView] = useState<'image' | 'details'>('image');
+  const [showReadMore, setShowReadMore] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -27,10 +29,18 @@ export const useImageModal = (onClose: () => void) => {
     }
   };
 
+  useEffect(() => {
+    if (descriptionRef.current) {
+      setShowReadMore(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
+    }
+  }, []);
+
   return {
     isClosing,
     isExpanded,
     view,
+    showReadMore,
+    descriptionRef,
     handleClose,
     handleBackdropClick,
     setView,

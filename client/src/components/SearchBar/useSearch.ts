@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import type { ImageItem } from '../../types/ImageItem';
 import { post } from '../../utils/fetchClient'; // Using the fetchClient directly
+import { TEXTS } from '../../constants/texts';
 
 interface UseSearchReturn {
   searchQuery: string;
@@ -39,10 +40,10 @@ export const useSearch = (debounceMs: number = 1000): UseSearchReturn => {
         if (attempt < maxRetries) {
           await new Promise(res => setTimeout(res, 500)); // Wait before retrying
         } else {
-          const errorMessage = err.message || 'An error occurred during search.';
+          const errorMessage = err.message || TEXTS.ERRORS.SEARCH_ERROR;
           setError(errorMessage);
           setResults([]);
-          toast.error(`Search failed after ${maxRetries + 1} attempts: ${errorMessage}`);
+          toast.error(TEXTS.TOAST.ERROR_PREFIX + errorMessage);
           setIsSearching(false);
           // Do not reset counter here to prevent further automatic searches for the same query
         }

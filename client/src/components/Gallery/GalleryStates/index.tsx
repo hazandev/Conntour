@@ -1,6 +1,7 @@
 import React from 'react';
 import { Spinner } from '../../Loader';
 import styles from './GalleryStates.module.scss';
+import { TEXTS, formatText } from '../../../constants/texts';
 
 interface GalleryStatesProps {
   isLoading: boolean;
@@ -10,20 +11,20 @@ interface GalleryStatesProps {
 }
 
 const getLoadingMessage = (query?: string) =>
-  query ? `Searching images: "${query}"...` : 'Loading space images...';
+  query ? formatText(TEXTS.LOADING.SEARCHING, { query }) : TEXTS.LOADING.INITIAL_LOAD;
 
 const getErrorContent = (query?: string) => ({
-  title: 'Failed to load images',
+  title: TEXTS.ERROR_STATES.LOAD_FAILED,
   message: query
-    ? `Problem searching for "${query}". Try different keywords or refresh the page`
-    : 'Please refresh the page or try again later',
+    ? formatText(TEXTS.ERROR_STATES.SEARCH_FAILED, { query })
+    : TEXTS.ERROR_STATES.GENERAL_ERROR,
 });
 
 const getEmptyContent = (query?: string) => ({
-  title: query ? `No images found for "${query}"` : 'No images found',
+  title: query ? formatText(TEXTS.EMPTY_STATES.NO_SEARCH_RESULTS, { query }) : TEXTS.EMPTY_STATES.NO_IMAGES_FOUND,
   message: query
-    ? 'Try searching with different keywords or another topic'
-    : 'Try searching for something interesting!',
+    ? TEXTS.EMPTY_STATES.NO_SEARCH_RESULTS_MESSAGE
+    : TEXTS.EMPTY_STATES.NO_IMAGES_MESSAGE,
 });
 
 const ErrorState = ({ title, message }: { title: string; message: string }) => (

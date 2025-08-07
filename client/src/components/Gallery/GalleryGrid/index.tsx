@@ -1,5 +1,5 @@
 import React from 'react';
-import { GalleryItem } from '../GalleryItem';
+import GalleryItem from '../GalleryItem';
 import type { ImageItem } from '../../../types/ImageItem';
 import styles from './GalleryGrid.module.scss';
 

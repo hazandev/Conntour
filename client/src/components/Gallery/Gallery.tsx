@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useGallery } from './useGallery';
 import { GalleryStates } from './GalleryStates';
 import { GalleryGrid } from './GalleryGrid';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { GalleryControls } from '../GalleryControls';
-import { ImageModal } from '../ImageModal';
+import { Spinner } from '../Loader';
 import styles from './Gallery.module.scss';
+import { TEXTS } from '../../constants/texts';
+
+const ImageModal = lazy(() => import('../ImageModal/index'));
 
 export const Gallery: React.FC = () => {
     const {
@@ -33,7 +36,7 @@ export const Gallery: React.FC = () => {
                 onResults={handleResults}
                 onSearchQueryChange={handleSearchQuery}
                 onSearching={handleSearchingState}
-                placeholder={`Search NASA images...`}
+                placeholder={TEXTS.SEARCH.PLACEHOLDER}
                 debounceMs={500}
                 averageConfidence={averageConfidence}
             />
@@ -41,13 +44,19 @@ export const Gallery: React.FC = () => {
             {hasStateToRender ? (
                 <GalleryStates
                     isLoading={isLoading && !currentSearchQuery}
-                    isError={!!error}
-                    isEmpty={!sortedImages.length && !isLoading && !error}
+                    isError={!!error && !sortedImages.length}
+                    isEmpty={!sortedImages.length && !isLoading && !error && !isSearching}
                     searchQuery={currentSearchQuery}
                 />
             ) : (
                 <>
-                    {showControls && (
+                    {isSearching && (
+                        <div className={styles.searchingContainer}>
+                            <Spinner message={`Searching for "${currentSearchQuery}"...`} />
+                        </div>
+                    )}
+                    
+                    {!isSearching && showControls && (
                         <GalleryControls
                             count={sortedImages.length}
                             searchQuery={currentSearchQuery}
@@ -57,18 +66,22 @@ export const Gallery: React.FC = () => {
                         />
                     )}
 
-                    <div className={styles.galleryWrapper}>
-                        <GalleryGrid images={sortedImages} onImageClick={handleImageClick} />
-                    </div>
+                    {!isSearching && (
+                        <div className={styles.galleryWrapper}>
+                            <GalleryGrid images={sortedImages} onImageClick={handleImageClick} />
+                        </div>
+                    )}
                 </>
             )}
 
-            {selectedImage && (
-                <ImageModal 
-                    image={selectedImage} 
-                    onClose={handleCloseModal} 
-                />
-            )}
+            <Suspense fallback={<Spinner />}>
+                {selectedImage && (
+                    <ImageModal 
+                        image={selectedImage} 
+                        onClose={handleCloseModal} 
+                    />
+                )}
+            </Suspense>
         </div>
     );
 };

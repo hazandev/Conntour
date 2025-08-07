@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import styles from './GalleryItem.module.scss';
 import type { ImageItem } from '../../../types/ImageItem';
 import { ConfidenceIndicator } from '../../ConfidenceIndicator';
+import { PLACEHOLDER_IMAGE } from '../../../constants/image';
 
 interface GalleryItemProps {
   image: ImageItem;
   onClick: () => void;
 }
 
-const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/400x180.png?text=Image+Not+Found';
-
-export const GalleryItem: React.FC<GalleryItemProps> = ({ image, onClick }) => {
+const GalleryItem: React.FC<GalleryItemProps> = ({ image, onClick }) => {
   const [imgSrc, setImgSrc] = useState(image.url);
 
   const handleError = () => {
@@ -54,3 +53,5 @@ export const GalleryItem: React.FC<GalleryItemProps> = ({ image, onClick }) => {
     </div>
   );
 };
+
+export default memo(GalleryItem);

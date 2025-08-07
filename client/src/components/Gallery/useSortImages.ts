@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
-import type { ImageItem } from '../../types/ImageItem';
-import type { SortOption } from '../SortControls';
+import type { ImageItem } from '../types/ImageItem';
+import type { SortOption } from '../components/SortControls';
+import { sortImages } from '../../helpers/sort';
 
 interface UseSortImagesReturn {
   sortOption: SortOption;
@@ -18,13 +19,7 @@ export const useSortImages = (images: ImageItem[]): UseSortImagesReturn => {
     return total / images.length;
   }, [images]);
 
-  const sortedImages = useMemo(() => {
-    const imagesCopy = [...images];
-    if (sortOption === 'confidence-asc') {
-      return imagesCopy.sort((a, b) => (a.confidence || 0) - (b.confidence || 0));
-    }
-    return imagesCopy.sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
-  }, [images, sortOption]);
+  const sortedImages = useMemo(() => sortImages(images, sortOption), [images, sortOption]);
 
   return {
     sortOption,
