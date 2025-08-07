@@ -1,4 +1,4 @@
-import React, { type KeyboardEvent, useEffect, useRef } from 'react';
+import React, { type KeyboardEvent, useEffect, useRef, useCallback } from 'react';
 import { useSearchBar } from './useSearchBar';
 import { SearchHistory } from '../SearchHistory';
 import { Spinner } from '../Loader';
@@ -39,23 +39,31 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   useEffect(() => {
     onResults(results);
     if (!isInitialMount.current && searchQuery.trim()) {
-      historyRef.current?.actions.addToHistory(searchQuery.trim(), results.length, averageConfidence);
+      // The history will be updated manually
     } else {
       isInitialMount.current = false;
     }
-  }, [results, averageConfidence, searchQuery]);
+  }, [results, searchQuery]);
 
   useEffect(() => {
     onSearchQueryChange(searchQuery);
   }, [searchQuery, onSearchQueryChange]);
 
+  const prevIsSearching = useRef(isSearching);
+
   useEffect(() => {
     onSearching(isSearching);
-  }, [isSearching, onSearching]);
+    if (prevIsSearching.current && !isSearching && searchQuery.trim()) {
+      historyRef.current?.actions.addToHistory(searchQuery.trim(), results.length, averageConfidence);
+    }
+    prevIsSearching.current = isSearching;
+  }, [isSearching, onSearching, searchQuery, results, averageConfidence]);
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      // Manually trigger a search to update history correctly.
+      setSearchQuery(searchQuery);
       historyRef.current?.actions.closeHistory();
     } else if (event.key === 'Escape') {
       historyRef.current?.actions.closeHistory();

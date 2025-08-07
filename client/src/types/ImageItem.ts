@@ -5,5 +5,6 @@ export interface ImageItem {
     date_created: string; // Match backend schema
     url: string;
     source: string;
-    confidence?: number; // Match backend schema
+    keywords: string[];
+    confidence: number; // Match backend schema
 }

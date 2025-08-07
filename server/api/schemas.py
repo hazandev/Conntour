@@ -9,7 +9,7 @@ class ImageItem(BaseModel):
     url: str
     date_created: datetime
     keywords: List[str]
-    confidence: Optional[float] = None
+    confidence: float = 0.0
 
 class SearchQuery(BaseModel):
     query: str = Field(..., min_length=1, description="The search term for images.")

@@ -14,7 +14,7 @@ export const useSortImages = (images: ImageItem[]): UseSortImagesReturn => {
   const [sortOption, setSortOption] = useState<SortOption>('confidence-desc');
 
   const averageConfidence = useMemo(() => {
-    if (!images.length) return 0;
+    if (!images.length) return 1;
     const total = images.reduce((sum, image) => sum + (image.confidence || 0), 0);
     return total / images.length;
   }, [images]);
