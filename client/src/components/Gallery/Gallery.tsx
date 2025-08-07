@@ -4,6 +4,7 @@ import { GalleryStates } from './GalleryStates';
 import { GalleryGrid } from './GalleryGrid';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { GalleryControls } from '../GalleryControls';
+import { QuoteLoader } from '../QuoteLoader';
 import { Spinner } from '../Loader';
 import styles from './Gallery.module.scss';
 import { TEXTS } from '../../constants/texts';
@@ -21,14 +22,54 @@ export const Gallery: React.FC = () => {
         setSortOption,
         averageConfidence,
         selectedImage,
-        hasStateToRender,
         showControls,
+        currentQuote,
         handleResults,
         handleSearchQuery,
         handleSearchingState,
         handleImageClick,
         handleCloseModal
     } = useGallery();
+
+    const renderMainContent = () => {
+        // If loading initial data OR actively searching, show the quote loader.
+        // This is the highest priority.
+        if (isLoading || isSearching) {
+            return <QuoteLoader quote={currentQuote} />;
+        }
+        
+        // If there are images to display, show the gallery.
+        // This runs only if not loading and not searching.
+        if (sortedImages.length > 0) {
+            return (
+                 <>
+                    {showControls && (
+                        <GalleryControls
+                            count={sortedImages.length}
+                            searchQuery={currentSearchQuery}
+                            isLoading={isSearching}
+                            currentSort={sortOption}
+                            onSortChange={setSortOption}
+                        />
+                    )}
+                    <div className={styles.galleryWrapper}>
+                        <GalleryGrid images={sortedImages} onImageClick={handleImageClick} />
+                    </div>
+                </>
+            );
+        }
+
+        // If not loading/searching and there are no images, show the appropriate state (error or empty).
+        // This is the fallback state.
+        return (
+            <GalleryStates
+                isLoading={false}
+                isError={!!error}
+                isEmpty={true}
+                searchQuery={currentSearchQuery}
+            />
+        );
+    };
 
     return (
         <div className={styles.galleryContainer}>
@@ -41,38 +82,7 @@ export const Gallery: React.FC = () => {
                 averageConfidence={averageConfidence}
             />
 
-            {hasStateToRender ? (
-                <GalleryStates
-                    isLoading={isLoading && !currentSearchQuery}
-                    isError={!!error && !sortedImages.length}
-                    isEmpty={!sortedImages.length && !isLoading && !error && !isSearching}
-                    searchQuery={currentSearchQuery}
-                />
-            ) : (
-                <>
-                    {isSearching && (
-                        <div className={styles.searchingContainer}>
-                            <Spinner message={`Searching for "${currentSearchQuery}"...`} />
-                        </div>
-                    )}
-                    
-                    {!isSearching && showControls && (
-                        <GalleryControls
-                            count={sortedImages.length}
-                            searchQuery={currentSearchQuery}
-                            isLoading={isSearching}
-                            currentSort={sortOption}
-                            onSortChange={setSortOption}
-                        />
-                    )}
-
-                    {!isSearching && (
-                        <div className={styles.galleryWrapper}>
-                            <GalleryGrid images={sortedImages} onImageClick={handleImageClick} />
-                        </div>
-                    )}
-                </>
-            )}
+            {renderMainContent()}
 
             <Suspense fallback={<Spinner />}>
                 {selectedImage && (

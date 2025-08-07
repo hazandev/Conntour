@@ -8,10 +8,8 @@
   z-index: 1000;
   width: 100%;
   max-width: 100vw;
-  background: linear-gradient(180deg, rgba(11, 15, 24, 0.95) 0%, rgba(13, 22, 48, 0.9) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba($space-accent, 0.2);
   padding: $spacing-lg $spacing-md;
   margin-bottom: $spacing-lg;
   box-sizing: border-box;

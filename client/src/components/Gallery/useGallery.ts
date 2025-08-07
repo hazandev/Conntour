@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { get } from '../../utils/fetchClient';
 import type { ImageItem } from '../../types/ImageItem';
 import { toast } from 'react-toastify';
 import { useSortImages } from './useSortImages';
-import { TEXTS, formatText } from '../../constants/texts';
+import { TEXTS } from '../../constants/texts';
+import { QUOTES } from '../../constants/quotes';
 
 export const useGallery = () => {
     const [initialImages, setInitialImages] = useState<ImageItem[]>([]);
@@ -13,20 +14,19 @@ export const useGallery = () => {
     const [currentSearchQuery, setCurrentSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null);
+    const [quoteIndex, setQuoteIndex] = useState(0);
+
+    const currentQuote = QUOTES[quoteIndex];
 
     useEffect(() => {
         const fetchInitialImages = async () => {
             try {
                 setIsLoading(true);
                 setError(null);
-                console.log('Fetching initial images...');
                 const fetchedImages = await get<ImageItem[]>('/sources');
-                console.log('Fetched images:', fetchedImages.length);
                 setInitialImages(fetchedImages);
-                // Clear any previous errors when data loads successfully
                 setError(null);
             } catch (err: any) {
-                console.error('Error fetching images:', err);
                 const errorMessage = err.message || TEXTS.ERRORS.LOADING_ERROR;
                 setError(errorMessage);
                 toast.error(TEXTS.TOAST.ERROR_PREFIX + errorMessage);
@@ -34,38 +34,38 @@ export const useGallery = () => {
                 setIsLoading(false);
             }
         };
-
         fetchInitialImages();
     }, []);
 
     const imagesToDisplay = currentSearchQuery ? searchResults : initialImages;
     const { sortOption, setSortOption, sortedImages, averageConfidence } = useSortImages(imagesToDisplay);
 
-    const handleResults = (results: ImageItem[]) => {
+    const handleResults = useCallback((results: ImageItem[]) => {
         setSearchResults(results);
-        // Clear error when search results are received
         setError(null);
-    };
+    }, []);
 
-    const handleSearchQuery = (query: string) => {
+    const handleSearchQuery = useCallback((query: string) => {
         setCurrentSearchQuery(query);
-    };
+    }, []);
     
-    const handleSearchingState = (searching: boolean) => {
+    const handleSearchingState = useCallback((searching: boolean) => {
+        if (searching) {
+            setSearchResults([]); // Reset results to show quote loader
+            setQuoteIndex((prevIndex) => (prevIndex + 1) % QUOTES.length);
+        }
         setIsSearching(searching);
-    }
+    }, []);
 
-    const handleImageClick = (image: ImageItem) => {
+    const handleImageClick = useCallback((image: ImageItem) => {
         setSelectedImage(image);
-    }
+    }, []);
     
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setSelectedImage(null);
-    }
+    }, []);
 
-    // Only show error state if there's an error AND no images to display
-    const hasStateToRender = (isLoading || (!!error && !sortedImages.length) || (!sortedImages.length && !isSearching));
-    const showControls = currentSearchQuery && !hasStateToRender;
+    const showControls = !!currentSearchQuery && sortedImages.length > 0;
 
     return {
         isLoading,
@@ -74,11 +74,11 @@ export const useGallery = () => {
         sortedImages,
         currentSearchQuery,
         sortOption,
-        setSortOption,
+        setSortOption: setSortOption, // Pass setter directly
         averageConfidence,
         selectedImage,
-        hasStateToRender,
         showControls,
+        currentQuote,
         handleResults,
         handleSearchQuery,
         handleSearchingState,
