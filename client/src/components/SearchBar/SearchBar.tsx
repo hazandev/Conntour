@@ -1,12 +1,13 @@
-import React, { type KeyboardEvent, useEffect, useRef, useCallback } from 'react';
+import React from 'react';
 import { useSearchBar } from './useSearchBar';
 import { SearchHistory } from '../SearchHistory';
-import { Spinner } from '../Loader';
 import styles from './SearchBar.module.scss';
 import { TEXTS } from '../../constants/texts';
+import type { ImageItem } from '../../types/ImageItem';
+import { SearchBarActions } from './SearchBarActions';
 
 interface SearchBarProps {
-  onResults: (results: any[]) => void;
+  onResults: (results: ImageItem[]) => void;
   onSearchQueryChange: (query: string) => void;
   onSearching: (isSearching: boolean) => void;
   placeholder?: string;
@@ -26,68 +27,22 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const {
     searchQuery,
-    setSearchQuery,
-    results,
     isSearching,
-    error,
-    clearSearch,
-  } = useSearchBar(debounceMs);
-
-  const isInitialMount = useRef(true);
-  const historyRef = useRef<{ actions: { toggleHistory: () => void, closeHistory: () => void, addToHistory: (query: string, resultsCount?: number, avgConfidence?: number) => void } }>(null);
-
-  useEffect(() => {
-    onResults(results);
-    if (!isInitialMount.current && searchQuery.trim()) {
-      // The history will be updated manually
-    } else {
-      isInitialMount.current = false;
-    }
-  }, [results, searchQuery]);
-
-  useEffect(() => {
-    onSearchQueryChange(searchQuery);
-  }, [searchQuery, onSearchQueryChange]);
-
-  const prevIsSearching = useRef(isSearching);
-
-  useEffect(() => {
-    onSearching(isSearching);
-    if (prevIsSearching.current && !isSearching && searchQuery.trim()) {
-      historyRef.current?.actions.addToHistory(searchQuery.trim(), results.length, averageConfidence);
-    }
-    prevIsSearching.current = isSearching;
-  }, [isSearching, onSearching, searchQuery, results, averageConfidence]);
-
-  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      // Manually trigger a search to update history correctly.
-      setSearchQuery(searchQuery);
-      historyRef.current?.actions.closeHistory();
-    } else if (event.key === 'Escape') {
-      historyRef.current?.actions.closeHistory();
-    }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const handleHistorySelect = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleClearSearch = () => {
-    clearSearch();
-    historyRef.current?.actions.closeHistory();
-  };
-
-  const containerClasses = [
-    styles.searchBarContainer,
-    isSearching ? styles.searchingState : '',
+    historyRef,
+    containerClasses,
+    handleInputChange,
+    handleKeyPress,
+    handleHistorySelect,
+    handleClearSearch,
+    toggleHistory,
+  } = useSearchBar({
+    onResults,
+    onSearchQueryChange,
+    onSearching,
+    debounceMs,
+    averageConfidence,
     className,
-  ].filter(Boolean).join(' ');
+  });
 
   return (
     <div className={containerClasses}>
@@ -110,37 +65,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             🔭
           </span>
           
-          <div className={styles.inputIcons}>
-            {isSearching ? (
-              <Spinner size="small" message="" className={styles.spinnerPlacement} />
-            ) : (
-              <button
-                type="button"
-                onClick={() => historyRef.current?.actions.toggleHistory()}
-                className={`${styles.historyButton}`}
-                aria-label="Search history"
-              >
-                🕘
-              </button>
-            )}
-            
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                className={`${styles.clearButton} ${searchQuery ? styles.visible : ''}`}
-                aria-label="Clear search"
-              >
-                ✖
-              </button>
-            )}
-          </div>
+          <SearchBarActions
+            isSearching={isSearching}
+            searchQuery={searchQuery}
+            onToggleHistory={toggleHistory}
+            onClearSearch={handleClearSearch}
+          />
 
           <SearchHistory onSelectQuery={handleHistorySelect} ref={historyRef} />
         </div>
-        
-        {error && <div className={styles.errorPill}>{error}</div>}
-
       </div>
     </div>
   );

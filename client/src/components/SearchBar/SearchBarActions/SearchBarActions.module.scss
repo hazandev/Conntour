@@ -1,0 +1,43 @@
+.inputIcons {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+  
+    .spinnerPlacement {
+      position: static;
+      transform: none;
+    }
+  
+    .historyButton,
+    .clearButton {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2em;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s, transform 0.2s;
+  
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  
+    .clearButton {
+      opacity: 0;
+      transform: scale(0.8);
+  
+      &.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+  
